@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IM8 Health — Amazon Product Catalog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --im8-burgundy: #50000B;
+      --im8-red-algae: #A40011;
+      --im8-flamingo: #FF9693;
+      --im8-stone: #E1CBB9;
+      --im8-sand: #FFE9D8;
+      --im8-off-white: #F5EAEA;
+      --im8-cream: #FDF8F5;
+      --font-title: 'Cormorant Garamond', serif;
+      --font-body: 'Raleway', sans-serif;
+      --font-data: 'Inter', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--im8-cream);
+      color: var(--im8-burgundy);
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.4s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 20px rgba(80,0,11,0.06);
+      padding: 0.8rem 3rem;
+    }
+
+    .nav-logo {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: white;
+      letter-spacing: 0.08em;
+      transition: color 0.4s;
+    }
+
+    .nav.scrolled .nav-logo { color: var(--im8-burgundy); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: rgba(255,255,255,0.8);
+      transition: color 0.3s;
+    }
+
+    .nav.scrolled .nav-links a { color: var(--im8-burgundy); }
+    .nav-links a:hover { color: var(--im8-flamingo); }
+
+    /* ===== HERO ===== */
+    .hero {
+      height: 100vh;
+      min-height: 700px;
+      background: linear-gradient(160deg, #2D0006 0%, var(--im8-burgundy) 40%, #6B1520 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image:
+        radial-gradient(circle at 20% 50%, var(--im8-flamingo) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, var(--im8-sand) 0%, transparent 40%),
+        radial-gradient(circle at 60% 80%, var(--im8-flamingo) 0%, transparent 45%);
+    }
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--im8-flamingo);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-title);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--im8-flamingo);
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--im8-stone);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.9s forwards;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-value {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: white;
+    }
+
+    .hero-stat-label {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      margin-top: 0.2rem;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.2s forwards;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--im8-flamingo), transparent);
+      margin: 0 auto;
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* ===== PRODUCT SHOWCASE ===== */
+    .showcase {
+      padding: 6rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .showcase-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+    }
+
+    .showcase-header-left {}
+
+    .showcase-eyebrow {
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--im8-red-algae);
+      margin-bottom: 0.5rem;
+    }
+
+    .showcase-title {
+      font-family: var(--font-title);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--im8-burgundy);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filter-pill {
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      border: 1px solid var(--im8-stone);
+      background: transparent;
+      color: var(--im8-burgundy);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-pill:hover, .filter-pill.active {
+      background: var(--im8-burgundy);
+      border-color: var(--im8-burgundy);
+      color: white;
+    }
+
+    /* ===== PRODUCT CARDS — EDITORIAL GRID ===== */
+    .products-editorial {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    @media (min-width: 1100px) {
+      .products-editorial {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .product-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: white;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(80,0,11,0.1);
+    }
+
+    .product-card .card-image-wrap {
+      min-height: 280px;
+    }
+
+    .card-image-wrap {
+      position: relative;
+      overflow: hidden;
+      min-height: 280px;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .product-card:hover .card-image {
+      transform: scale(1.04);
+    }
+
+    .card-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(80,0,11,0.6) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .product-card:hover .card-image-overlay {
+      opacity: 1;
+    }
+
+    .card-status {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      padding: 0.35rem 0.8rem;
+      border-radius: 100px;
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: #16a34a;
+    }
+
+    .card-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #16a34a;
+      animation: pulse 2s ease infinite;
+    }
+
+    .card-body {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+
+    .card-sku {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-title {
+      font-family: var(--font-title);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--im8-burgundy);
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-variant {
+      font-size: 0.8rem;
+      color: var(--im8-red-algae);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-price {
+      font-family: var(--font-data);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--im8-burgundy);
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .card-tag {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      background: var(--im8-off-white);
+      color: var(--im8-burgundy);
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--im8-red-algae);
+      margin-top: 1rem;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover .card-cta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-cta-arrow {
+      width: 16px;
+      height: 1px;
+      background: var(--im8-red-algae);
+      position: relative;
+      transition: width 0.3s ease;
+    }
+
+    .card-cta-arrow::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -3px;
+      width: 7px;
+      height: 7px;
+      border-right: 1px solid var(--im8-red-algae);
+      border-top: 1px solid var(--im8-red-algae);
+      transform: rotate(45deg);
+    }
+
+    /* ===== DETAIL MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(45,0,6,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 3vh 2rem;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.visible { opacity: 1; }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      max-width: 1000px;
+      width: 100%;
+      overflow: hidden;
+      transform: translateY(20px) scale(0.98);
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 40px 80px rgba(80,0,11,0.15);
+    }
+
+    .modal-overlay.visible .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--im8-burgundy);
+      z-index: 10;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .modal-close:hover { transform: scale(1.1); }
+
+    .modal-hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      min-height: 420px;
+    }
+
+    .modal-image-section {
+      position: relative;
+      background: var(--im8-sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .modal-info {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .modal-sku {
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      margin-bottom: 0.8rem;
+    }
+
+    .modal-title {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--im8-burgundy);
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+
+    .modal-variant {
+      font-size: 0.9rem;
+      color: var(--im8-red-algae);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .modal-spec {
+      background: var(--im8-cream);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+    }
+
+    .modal-spec-label {
+      font-family: var(--font-data);
+      font-size: 0.5rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      margin-bottom: 0.15rem;
+    }
+
+    .modal-spec-value {
+      font-family: var(--font-data);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--im8-burgundy);
+    }
+
+    .modal-price-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .modal-price {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--im8-burgundy);
+    }
+
+    .modal-price-note {
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      color: var(--im8-stone);
+    }
+
+    /* Modal content tabs */
+    .modal-content {
+      padding: 0 3rem 3rem;
+    }
+
+    .modal-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--im8-off-white);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-tab {
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: none;
+      color: var(--im8-stone);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .modal-tab.active {
+      color: var(--im8-burgundy);
+    }
+
+    .modal-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 1.5rem;
+      right: 1.5rem;
+      height: 2px;
+      background: var(--im8-red-algae);
+      border-radius: 2px;
+    }
+
+    .modal-tab-content {
+      display: none;
+    }
+
+    .modal-tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding: 0.8rem 0 0.8rem 2rem;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--im8-burgundy);
+      border-bottom: 1px solid var(--im8-off-white);
+    }
+
+    .bullet-list li:last-child { border-bottom: none; }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.2rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--im8-flamingo), var(--im8-red-algae));
+    }
+
+    .bullet-list li strong {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      color: var(--im8-red-algae);
+      margin-bottom: 0.2rem;
+    }
+
+    .modal-description {
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: rgba(80,0,11,0.75);
+    }
+
+    .modal-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .keyword-chip {
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 100px;
+      background: var(--im8-off-white);
+      color: var(--im8-burgundy);
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .keyword-chip:hover {
+      border-color: var(--im8-flamingo);
+      background: white;
+    }
+
+    .modal-bom {
+      background: var(--im8-cream);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .modal-bom-label {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-bom-value {
+      font-family: var(--font-data);
+      font-size: 0.8rem;
+      color: var(--im8-burgundy);
+    }
+
+    /* ===== COMPARISON TABLE SECTION ===== */
+    .comparison {
+      background: white;
+      padding: 5rem 3rem;
+    }
+
+    .comparison-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .comparison-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .comparison table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-data);
+      font-size: 0.78rem;
+    }
+
+    .comparison thead th {
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      border-bottom: 2px solid var(--im8-off-white);
+    }
+
+    .comparison thead th:first-child {
+      text-align: left;
+    }
+
+    .comparison tbody td {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid var(--im8-off-white);
+      color: var(--im8-burgundy);
+    }
+
+    .comparison tbody td:first-child {
+      text-align: left;
+      font-weight: 500;
+      color: var(--im8-burgundy);
+    }
+
+    .comparison tbody tr:hover {
+      background: var(--im8-cream);
+    }
+
+    .comparison-flavor-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--im8-burgundy);
+      padding: 4rem 3rem;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      color: white;
+      font-weight: 300;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-sub {
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--im8-stone);
+      margin-bottom: 2rem;
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--im8-flamingo);
+      margin: 0 auto 1.5rem;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes scrollPulse {
+      0% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .products-editorial {
+        grid-template-columns: 1fr;
+      }
+      .modal-hero { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .nav { padding: 1rem 1.5rem; }
+      .showcase { padding: 4rem 1.5rem; }
+      .showcase-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: 2.5rem; }
+      .nav-links { display: none; }
+      .comparison table { font-size: 0.65rem; }
+      .comparison thead th, .comparison tbody td { padding: 0.6rem 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">IM8 Health</div>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#compare">Compare</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Amazon Marketplace &mdash; May 2026</p>
+      <h1 class="hero-title">Daily <em>Essentials</em><br>Travel Box Set</h1>
+      <p class="hero-subtitle">A comprehensive daily nutritional supplement in a convenient 7-stick travel format. Three signature flavors. One daily ritual.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">10</div>
+          <div class="hero-stat-label">SKUs</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">$29</div>
+          <div class="hero-stat-label">MSRP</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">7ct</div>
+          <div class="hero-stat-label">Per Box</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Product Showcase -->
+  <section class="showcase" id="products">
+    <div class="showcase-header reveal">
+      <div class="showcase-header-left">
+        <p class="showcase-eyebrow">Product Lineup</p>
+        <h2 class="showcase-title">Active Listings</h2>
+      </div>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="single">Single Flavor</button>
+        <button class="filter-pill" data-filter="variety">Variety</button>
+      </div>
+
+    </div>
+
+    <div class="products-editorial reveal" id="productsGrid"></div>
+  </section>
+
+  <!-- Comparison Table -->
+  <section class="comparison" id="compare">
+    <div class="comparison-inner reveal">
+      <div class="comparison-header">
+        <p class="showcase-eyebrow">Amazon Catalog</p>
+        <h2 class="showcase-title">Master List</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th>SKU</th>
+            <th>UPC</th>
+            <th>Serving Size</th>
+            <th>Count</th>
+            <th>Price</th>
+            <th>Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#7B2D8B"></span>Essentials &mdash; Acai + Mixed Berries</td>
+            <td>IM8-FG-000149</td>
+            <td>TBD</td>
+            <td>13.4g</td>
+            <td>7</td>
+            <td>$29.00</td>
+            <td>250g</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#F59E0B"></span>Essentials &mdash; Lemon + Orange</td>
+            <td>IM8-FG-000185</td>
+            <td>TBD</td>
+            <td>14.4g</td>
+            <td>7</td>
+            <td>$29.00</td>
+            <td>250g</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#F97316"></span>Essentials &mdash; Mango + Passion Fruit</td>
+            <td>IM8-FG-000186</td>
+            <td>TBD</td>
+            <td>13.9g</td>
+            <td>7</td>
+            <td>$29.00</td>
+            <td>250g</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background: linear-gradient(135deg,#7B2D8B,#F59E0B,#F97316)"></span>Essentials &mdash; Variety Pack</td>
+            <td>IM8-FG-000198</td>
+            <td>TBD</td>
+            <td>13&ndash;14g</td>
+            <td>7</td>
+            <td>$29.00</td>
+            <td>250g</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#2A7B5B"></span>Longevity</td>
+            <td>IM8-FG-000153</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>7</td>
+            <td>TBD</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#7B2D8B"></span>Essentials &mdash; Acai + Mixed Berries</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>13.4g</td>
+            <td>30</td>
+            <td>TBD</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#F59E0B"></span>Essentials &mdash; Lemon + Orange</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>14.4g</td>
+            <td>30</td>
+            <td>TBD</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#F97316"></span>Essentials &mdash; Mango + Passion Fruit</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>13.9g</td>
+            <td>30</td>
+            <td>TBD</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background: linear-gradient(135deg,#7B2D8B,#F59E0B,#F97316)"></span>Essentials &mdash; Variety Pack</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>13&ndash;14g</td>
+            <td>30</td>
+            <td>TBD</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-flavor-dot" style="background:#2A7B5B"></span>Longevity</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>TBD</td>
+            <td>30</td>
+            <td>TBD</td>
+            <td>TBD</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer-brand">IM8 Health</p>
+    <p class="footer-sub">Amazon Product Catalog</p>
+    <div class="footer-divider"></div>
+    <p class="footer-note">Confidential &mdash; Prepared May 2026 &mdash; 10 SKUs &mdash; Brand: IM8 Health</p>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent"></div>
+  </div>
+
+  <script>
+    const products = [
+      {
+        sku: "IM8-FG-000149",
+        title: "Essentials Travel Box",
+        variant: "Acai + Mixed Berries",
+        type: "single",
+        color: "#7B2D8B",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "7",
+        serving: "13.4g per stick",
+        price: "$29.00",
+        weight: "250g",
+        status: "Active",
+        image: "https://cdn.shopify.com/s/files/1/0637/4460/6375/files/202602_essentialsV2acai-travel7_peach.jpg?v=1771838751",
+        bom: "7x Essentials Stick Pack V2 (Acai, 13.4g) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "Travel-Ready Format", text: "7 individually wrapped stick packs designed for on-the-go nutrition. Just mix with water \u2014 no blender needed." },
+          { heading: "Acai + Mixed Berries", text: "A refreshing, naturally flavored daily supplement powder with real acai and mixed berry taste." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each 13.4g stick pack dissolves quickly in 8\u201312 oz of cold water. Perfect for travel, office, gym, or anywhere." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Travel Box Set in Acai + Mixed Berries flavor. This convenient 7-count box contains individually wrapped stick packs of our flagship daily nutritional supplement. Each serving (13.4g) is formulated to deliver a comprehensive blend of essential vitamins, minerals, and superfoods.",
+        keywords: ["daily supplement", "powder", "stick pack", "acai", "berry", "travel", "vitamins", "minerals", "superfoods", "wellness", "nutrition", "drink mix", "essentials", "health", "IM8"]
+      },
+      {
+        sku: "IM8-FG-000185",
+        title: "Essentials Travel Box",
+        variant: "Lemon + Orange",
+        type: "single",
+        color: "#F59E0B",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "7",
+        serving: "14.4g per stick",
+        price: "$29.00",
+        weight: "250g",
+        status: "Active",
+        image: "https://cdn.shopify.com/s/files/1/0637/4460/6375/files/202602_essentialsV2lemon-travel7_peach.jpg?v=1771838751",
+        bom: "7x Essentials Stick Pack V2 (Orange Lemon, 14.4g) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "Travel-Ready Format", text: "7 individually wrapped stick packs designed for on-the-go nutrition. Just mix with water \u2014 no blender needed." },
+          { heading: "Lemon + Orange Flavor", text: "A bright, citrus-forward daily supplement powder that makes your daily wellness routine something to look forward to." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each 14.4g stick pack dissolves quickly in 8\u201312 oz of cold water. Perfect for travel, office, gym, or anywhere." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Travel Box Set in Lemon + Orange flavor. This convenient 7-count box contains individually wrapped stick packs of our flagship daily nutritional supplement. Each serving (14.4g) is formulated to deliver a comprehensive blend of essential vitamins, minerals, and superfoods.",
+        keywords: ["daily supplement", "powder", "stick pack", "lemon", "orange", "citrus", "travel", "vitamins", "minerals", "superfoods", "wellness", "nutrition", "drink mix", "essentials", "health", "IM8"]
+      },
+      {
+        sku: "IM8-FG-000186",
+        title: "Essentials Travel Box",
+        variant: "Mango + Passion Fruit",
+        type: "single",
+        color: "#F97316",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "7",
+        serving: "13.9g per stick",
+        price: "$29.00",
+        weight: "250g",
+        status: "Active",
+        image: "https://cdn.shopify.com/s/files/1/0637/4460/6375/files/202602_essentialsV2mango-travel7_peach.jpg?v=1771838751",
+        bom: "7x Essentials Stick Pack V2 (Mango, 13.9g) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "Travel-Ready Format", text: "7 individually wrapped stick packs designed for on-the-go nutrition. Just mix with water \u2014 no blender needed." },
+          { heading: "Mango + Passion Fruit", text: "An exotic, fruit-forward daily supplement powder bursting with tropical flavor in every sip." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each 13.9g stick pack dissolves quickly in 8\u201312 oz of cold water. Perfect for travel, office, gym, or anywhere." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Travel Box Set in Mango + Passion Fruit flavor. This convenient 7-count box contains individually wrapped stick packs of our flagship daily nutritional supplement. Each serving (13.9g) is formulated to deliver a comprehensive blend of essential vitamins, minerals, and superfoods.",
+        keywords: ["daily supplement", "powder", "stick pack", "mango", "passion fruit", "tropical", "travel", "vitamins", "minerals", "superfoods", "wellness", "nutrition", "drink mix", "essentials", "health", "IM8"]
+      },
+      {
+        sku: "IM8-FG-000198",
+        title: "Essentials Travel Box",
+        variant: "Variety Pack",
+        type: "variety",
+        color: "linear-gradient(135deg,#7B2D8B,#F59E0B,#F97316)",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "7",
+        serving: "13\u201314g per stick",
+        price: "$29.00",
+        weight: "250g",
+        status: "Active",
+        image: "https://cdn.shopify.com/s/files/1/0637/4460/6375/files/202602_essentialsV2variety-travel7_peach.jpg?v=1771838751",
+        bom: "3x Acai (13.4g) + 2x Orange Lemon (14.4g) + 2x Mango (13.9g) + 1x Variety Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "Travel-Ready Format", text: "7 individually wrapped stick packs designed for on-the-go nutrition. Just mix with water \u2014 no blender needed." },
+          { heading: "3 Flavors in One Box", text: "Includes 3x Acai + Mixed Berries, 2x Lemon + Orange, and 2x Mango + Passion Fruit. Discover your favorite or enjoy daily variety." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each stick pack dissolves quickly in 8\u201312 oz of cold water. Perfect for travel, office, gym, or anywhere." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Travel Box Set \u2014 Variety Pack. This convenient 7-count box contains a curated mix of our three signature flavors: 3x Acai + Mixed Berries (13.4g), 2x Lemon + Orange (14.4g), and 2x Mango + Passion Fruit (13.9g).",
+        keywords: ["daily supplement", "powder", "stick pack", "variety", "sampler", "acai", "lemon", "orange", "mango", "travel", "vitamins", "minerals", "superfoods", "wellness", "nutrition", "drink mix", "essentials", "health", "IM8"]
+      },
+      {
+        sku: "IM8-FG-000153",
+        title: "Longevity Travel Box",
+        variant: "Longevity",
+        type: "single",
+        color: "#2A7B5B",
+        productLine: "Longevity",
+        form: "Powder (Stick Pack)",
+        count: "7",
+        serving: "TBD",
+        price: "TBD",
+        weight: "TBD",
+        status: "Active",
+        image: "",
+        bom: "7x Longevity Stick Pack + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "Travel-Ready Format", text: "7 individually wrapped stick packs designed for on-the-go nutrition. Just mix with water — no blender needed." },
+          { heading: "Longevity Formula", text: "A targeted daily supplement formulated to support healthy aging and long-term wellness." },
+          { heading: "Easy to Use", text: "Each stick pack dissolves quickly in 8–12 oz of cold water. Perfect for travel, office, gym, or anywhere." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Longevity Travel Box Set. This convenient 7-count box contains individually wrapped stick packs of our longevity-focused daily supplement.",
+        keywords: ["longevity", "supplement", "powder", "stick pack", "travel", "anti-aging", "wellness", "health", "IM8"]
+      },
+      {
+        sku: "TBD",
+        title: "Essentials Box",
+        variant: "Acai + Mixed Berries",
+        type: "single",
+        color: "#7B2D8B",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "30",
+        serving: "13.4g per stick",
+        price: "TBD",
+        weight: "TBD",
+        status: "Planned",
+        image: "",
+        bom: "30x Essentials Stick Pack V2 (Acai, 13.4g) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "30-Day Supply", text: "30 individually wrapped stick packs — one full month of daily nutrition in a single box." },
+          { heading: "Acai + Mixed Berries", text: "A refreshing, naturally flavored daily supplement powder with real acai and mixed berry taste." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each 13.4g stick pack dissolves quickly in 8–12 oz of cold water." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Box (30-count) in Acai + Mixed Berries flavor. A full month supply of our flagship daily nutritional supplement.",
+        keywords: ["daily supplement", "powder", "stick pack", "acai", "berry", "30 count", "vitamins", "minerals", "superfoods", "wellness", "IM8"]
+      },
+      {
+        sku: "TBD",
+        title: "Essentials Box",
+        variant: "Lemon + Orange",
+        type: "single",
+        color: "#F59E0B",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "30",
+        serving: "14.4g per stick",
+        price: "TBD",
+        weight: "TBD",
+        status: "Planned",
+        image: "",
+        bom: "30x Essentials Stick Pack V2 (Orange Lemon, 14.4g) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "30-Day Supply", text: "30 individually wrapped stick packs — one full month of daily nutrition in a single box." },
+          { heading: "Lemon + Orange Flavor", text: "A bright, citrus-forward daily supplement powder that makes your daily wellness routine something to look forward to." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each 14.4g stick pack dissolves quickly in 8–12 oz of cold water." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Box (30-count) in Lemon + Orange flavor. A full month supply of our flagship daily nutritional supplement.",
+        keywords: ["daily supplement", "powder", "stick pack", "lemon", "orange", "citrus", "30 count", "vitamins", "minerals", "superfoods", "wellness", "IM8"]
+      },
+      {
+        sku: "TBD",
+        title: "Essentials Box",
+        variant: "Mango + Passion Fruit",
+        type: "single",
+        color: "#F97316",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "30",
+        serving: "13.9g per stick",
+        price: "TBD",
+        weight: "TBD",
+        status: "Planned",
+        image: "",
+        bom: "30x Essentials Stick Pack V2 (Mango, 13.9g) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "30-Day Supply", text: "30 individually wrapped stick packs — one full month of daily nutrition in a single box." },
+          { heading: "Mango + Passion Fruit", text: "An exotic, fruit-forward daily supplement powder bursting with tropical flavor in every sip." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each 13.9g stick pack dissolves quickly in 8–12 oz of cold water." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Box (30-count) in Mango + Passion Fruit flavor. A full month supply of our flagship daily nutritional supplement.",
+        keywords: ["daily supplement", "powder", "stick pack", "mango", "passion fruit", "tropical", "30 count", "vitamins", "minerals", "superfoods", "wellness", "IM8"]
+      },
+      {
+        sku: "TBD",
+        title: "Essentials Box",
+        variant: "Variety Pack",
+        type: "variety",
+        color: "linear-gradient(135deg,#7B2D8B,#F59E0B,#F97316)",
+        productLine: "Essentials",
+        form: "Powder (Stick Pack)",
+        count: "30",
+        serving: "13–14g per stick",
+        price: "TBD",
+        weight: "TBD",
+        status: "Planned",
+        image: "",
+        bom: "30x Essentials Stick Packs (mixed flavors) + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "30-Day Supply", text: "30 individually wrapped stick packs — one full month of daily nutrition in a single box." },
+          { heading: "3 Flavors in One Box", text: "A curated mix of Acai + Mixed Berries, Lemon + Orange, and Mango + Passion Fruit." },
+          { heading: "Daily Ultimate Essentials", text: "A comprehensive daily nutritional supplement combining essential vitamins, minerals, and superfoods in one convenient serving." },
+          { heading: "Easy to Use", text: "Each stick pack dissolves quickly in 8–12 oz of cold water." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Daily Ultimate Essentials Box (30-count) — Variety Pack. A full month supply with a curated mix of all three signature flavors.",
+        keywords: ["daily supplement", "powder", "stick pack", "variety", "30 count", "vitamins", "minerals", "superfoods", "wellness", "IM8"]
+      },
+      {
+        sku: "TBD",
+        title: "Longevity Box",
+        variant: "Longevity",
+        type: "single",
+        color: "#2A7B5B",
+        productLine: "Longevity",
+        form: "Powder (Stick Pack)",
+        count: "30",
+        serving: "TBD",
+        price: "TBD",
+        weight: "TBD",
+        status: "Planned",
+        image: "",
+        bom: "30x Longevity Stick Pack + 1x Carton",
+        category: "Health & Household > Vitamins & Dietary Supplements",
+        bullets: [
+          { heading: "30-Day Supply", text: "30 individually wrapped stick packs — one full month of daily nutrition in a single box." },
+          { heading: "Longevity Formula", text: "A targeted daily supplement formulated to support healthy aging and long-term wellness." },
+          { heading: "Easy to Use", text: "Each stick pack dissolves quickly in 8–12 oz of cold water." },
+          { heading: "Premium Quality", text: "Made by IM8 Health with carefully sourced ingredients. No artificial colors or flavors." }
+        ],
+        description: "IM8 Longevity Box (30-count). A full month supply of our longevity-focused daily supplement.",
+        keywords: ["longevity", "supplement", "powder", "stick pack", "30 count", "anti-aging", "wellness", "health", "IM8"]
+      }
+    ];
+
+    // Render product cards
+    const grid = document.getElementById('productsGrid');
+
+    products.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.dataset.type = p.type;
+      card.onclick = () => openModal(idx);
+
+      card.innerHTML = `
+        <div class="card-image-wrap">
+          <img class="card-image" src="${p.image}" alt="${p.variant}" loading="lazy">
+          <div class="card-image-overlay"></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <p class="card-sku">${p.sku}</p>
+            <h3 class="card-title">${p.variant}</h3>
+            <p class="card-variant">${p.title} &bull; ${p.count} Sticks</p>
+          </div>
+          <div>
+            <div class="card-footer">
+              <span class="card-price">${p.price}</span>
+              <div class="card-tags">
+                <span class="card-tag">${p.serving}</span>
+              </div>
+            </div>
+            <div class="card-cta">View Details <span class="card-cta-arrow"></span></div>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    // Filter pills
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const filter = pill.dataset.filter;
+        document.querySelectorAll('.product-card').forEach(card => {
+          if (filter === 'all' || card.dataset.type === filter) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Modal
+    function openModal(idx) {
+      const p = products[idx];
+      const overlay = document.getElementById('modalOverlay');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div class="modal-hero">
+          <div class="modal-image-section">
+            <img class="modal-image" src="${p.image}" alt="${p.variant}">
+          </div>
+          <div class="modal-info">
+            <p class="modal-sku">${p.sku}</p>
+            <h2 class="modal-title">${p.variant}</h2>
+            <p class="modal-variant">${p.productLine} &bull; ${p.form}</p>
+            <div class="modal-specs">
+              <div class="modal-spec">
+                <p class="modal-spec-label">Count</p>
+                <p class="modal-spec-value">${p.count} sticks</p>
+              </div>
+              <div class="modal-spec">
+                <p class="modal-spec-label">Serving</p>
+                <p class="modal-spec-value">${p.serving}</p>
+              </div>
+              <div class="modal-spec">
+                <p class="modal-spec-label">Weight</p>
+                <p class="modal-spec-value">${p.weight}</p>
+              </div>
+              <div class="modal-spec">
+                <p class="modal-spec-label">Category</p>
+                <p class="modal-spec-value" style="font-size:0.65rem">Vitamins & Supplements</p>
+              </div>
+            </div>
+            <div class="modal-price-row">
+              <span class="modal-price">${p.price}</span>
+              <span class="modal-price-note">MSRP &bull; USD</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-content">
+          <div class="modal-tabs">
+            <button class="modal-tab active" data-tab="bullets">Key Features</button>
+            <button class="modal-tab" data-tab="description">Description</button>
+          </div>
+          <div class="modal-tab-content active" data-tab="bullets">
+            <ul class="bullet-list">
+              ${p.bullets.map(b => `<li><strong>${b.heading}</strong>${b.text}</li>`).join('')}
+            </ul>
+            <div class="modal-bom">
+              <p class="modal-bom-label">BOM Contents</p>
+              <p class="modal-bom-value">${p.bom}</p>
+            </div>
+          </div>
+          <div class="modal-tab-content" data-tab="description">
+            <p class="modal-description">${p.description}</p>
+          </div>
+        </div>
+      `;
+
+      overlay.classList.add('active');
+      requestAnimationFrame(() => overlay.classList.add('visible'));
+      document.body.style.overflow = 'hidden';
+
+      // Tab switching
+      content.querySelectorAll('.modal-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          content.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+          content.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          content.querySelector(`.modal-tab-content[data-tab="${tab.dataset.tab}"]`).classList.add('active');
+        });
+      });
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('modalOverlay');
+      overlay.classList.remove('visible');
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }, 400);
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Sticky nav
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

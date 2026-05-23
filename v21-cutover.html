@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2.0 → v2.1 Cutover Plan — Manager Summary</title>
+<style>
+:root { --burgundy:#50000B; --red-algae:#A40011; --flamingo:#FF9693; --sand:#FFE9D8; --stone:#E1CBB9; --off-white:#F5EAEA; --dark-text:#32050A; --muted:#785A50; --acai:#783246; --lemon:#D9A000; --mango:#B45A32; --critical:#DC2626; --urgent:#D97706; --plan:#2563EB; --ok:#16A34A; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; background:#FAF7F5; color:var(--dark-text); line-height:1.5; }
+.container { max-width:1100px; margin:0 auto; padding:24px 20px 60px; }
+header.hero { background:linear-gradient(135deg,var(--burgundy) 0%,#6E0B1D 100%); color:var(--sand); padding:36px 28px; border-radius:12px; margin-bottom:28px; box-shadow:0 4px 20px rgba(80,0,11,0.15); }
+.logo { font-size:28px; font-weight:800; color:white; letter-spacing:-1px; display:inline-block; margin-bottom:12px; }
+.hero h1 { font-size:28px; font-weight:700; margin-bottom:6px; color:white; }
+.hero h1 small { display:block; font-size:16px; color:var(--flamingo); font-weight:400; margin-top:4px; }
+.hero .meta { margin-top:14px; font-size:13px; color:var(--sand); opacity:0.9; }
+.summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-bottom:28px; }
+.summary-card { background:white; border:1px solid var(--stone); border-radius:10px; padding:18px 20px; border-left:4px solid var(--red-algae); }
+.summary-card .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
+.summary-card .value { font-size:24px; font-weight:700; color:var(--burgundy); }
+.summary-card .sub { font-size:12px; color:var(--muted); margin-top:4px; }
+.summary-card.urgent { border-left-color:var(--critical); }
+.summary-card.urgent .value { color:var(--critical); }
+h2.section-title { font-size:18px; font-weight:700; color:var(--burgundy); margin:32px 0 14px; padding-left:14px; border-left:4px solid var(--red-algae); }
+.panel { background:white; border:1px solid var(--stone); border-radius:10px; padding:20px 24px; margin-bottom:20px; }
+.panel p { margin-bottom:8px; }
+.timeline { background:white; border:1px solid var(--stone); border-radius:10px; padding:24px; margin-bottom:28px; }
+.timeline-row { display:grid; grid-template-columns:200px 1fr; align-items:center; gap:16px; padding:10px 0; }
+.timeline-label { font-weight:600; font-size:13px; color:var(--dark-text); }
+.timeline-track { position:relative; height:36px; background:linear-gradient(to right,var(--sand) 0%,var(--off-white) 100%); border-radius:6px; overflow:visible; }
+.timeline-marker { position:absolute; top:50%; transform:translate(-50%,-50%); width:14px; height:14px; border-radius:50%; border:3px solid white; box-shadow:0 1px 4px rgba(0,0,0,0.2); }
+.timeline-marker.urgency-critical { background:var(--critical); } .timeline-marker.urgency-urgent { background:var(--urgent); } .timeline-marker.urgency-plan { background:var(--plan); } .timeline-marker.urgency-ok { background:var(--ok); }
+.timeline-date { position:absolute; top:100%; left:50%; transform:translateX(-50%); margin-top:6px; font-size:11px; font-weight:600; color:var(--burgundy); white-space:nowrap; background:white; padding:1px 6px; border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+.wh-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(440px,1fr)); gap:18px; }
+.wh-card { background:white; border:1px solid var(--stone); border-radius:12px; padding:22px 24px; border-top:5px solid var(--red-algae); }
+.wh-card.urgency-critical { border-top-color:var(--critical); }
+.wh-card.urgency-urgent { border-top-color:var(--urgent); }
+.wh-card.urgency-plan { border-top-color:var(--plan); }
+.wh-card.urgency-ok { border-top-color:var(--ok); }
+.wh-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.wh-title { display:flex; align-items:center; gap:10px; }
+.wh-flag { font-size:22px; }
+.wh-title h2 { font-size:17px; font-weight:700; color:var(--burgundy); }
+.wh-region { background:var(--off-white); color:var(--muted); padding:4px 10px; border-radius:4px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+.wh-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:12px; margin-bottom:18px; }
+.wh-block { padding:12px; background:var(--off-white); border-radius:8px; }
+.wh-block.primary { background:linear-gradient(135deg,var(--burgundy) 0%,#6E0B1D 100%); color:var(--sand); }
+.wh-block.primary .wh-label { color:var(--flamingo); }
+.wh-block.primary .wh-date { color:white; }
+.wh-block.primary .wh-meta { color:var(--sand); opacity:0.85; }
+.wh-label { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); font-weight:600; margin-bottom:4px; }
+.wh-date { font-size:20px; font-weight:700; color:var(--burgundy); letter-spacing:-0.5px; }
+.wh-bottleneck { font-size:18px; font-weight:800; letter-spacing:0.5px; }
+.wh-bottleneck.acai { color:var(--acai); }
+.wh-bottleneck.lemon { color:var(--lemon); }
+.wh-bottleneck.mango { color:var(--mango); }
+.wh-meta { font-size:11px; color:var(--muted); margin-top:2px; }
+.wh-status { font-size:12px; font-weight:600; color:var(--burgundy); line-height:1.3; }
+.urgency-critical .wh-status { color:var(--critical); }
+.urgency-urgent .wh-status { color:var(--urgent); }
+.urgency-plan .wh-status { color:var(--plan); }
+.urgency-ok .wh-status { color:var(--ok); }
+.wh-phase2 { border-top:1px solid var(--off-white); padding-top:14px; margin-top:6px; }
+.wh-phase2-title { font-size:12px; font-weight:700; color:var(--burgundy); margin-bottom:8px; }
+.wh-phase2-list { list-style:none; padding:0; }
+.wh-phase2-list li { font-size:13px; padding:5px 0; color:var(--dark-text); line-height:1.4; }
+.wh-phase2-list li.muted { color:var(--muted); font-style:italic; }
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:8px; vertical-align:middle; }
+.dot.acai { background:var(--acai); } .dot.lemon { background:var(--lemon); } .dot.mango { background:var(--mango); }
+.wh-stock { display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; padding-top:12px; border-top:1px solid var(--off-white); font-size:11.5px; color:var(--muted); }
+.wh-stock b { color:var(--dark-text); }
+.callout { border-radius:10px; padding:18px 22px; margin-bottom:20px; }
+.callout.danger { background:#FEE2E2; border-left:5px solid var(--critical); }
+.callout h3 { font-size:14px; font-weight:700; color:var(--critical); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
+.callout p { font-size:14px; color:var(--dark-text); line-height:1.55; }
+.callout ul { margin-top:10px; padding-left:18px; }
+.callout li { font-size:13.5px; margin-bottom:6px; }
+footer { margin-top:50px; padding-top:20px; border-top:1px solid var(--stone); font-size:11px; color:var(--muted); text-align:center; line-height:1.6; }
+@media print { body{background:white;} .container{padding:0;max-width:100%;} .wh-card,.panel,.timeline,.summary-card{page-break-inside:avoid;box-shadow:none;border:1px solid #ddd;} .wh-cards{grid-template-columns:1fr;} header.hero{background:var(--burgundy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;} }
+@media (max-width:720px) { .wh-grid{grid-template-columns:1fr;} .timeline-row{grid-template-columns:1fr;gap:8px;} .wh-cards{grid-template-columns:1fr;} header.hero{padding:24px 18px;} .hero h1{font-size:22px;} }
+</style></head>
+<body><div class="container">
+  <header class="hero">
+    <div class="logo">IM8</div>
+    <h1>Essentials v2.0 → v2.1 Cutover Plan<small>Per-warehouse switch timeline · Manager summary</small></h1>
+    <div class="meta">2026-05-23 · Demand from ops.demand_daily (Skio + OTP forecast + gift journey), forward 84d · ATL/RENO split via stord.fulfillment_ratios (66/34 default)</div>
+  </header>
+
+  <h2 class="section-title">Global v2.0 Stick Inventory</h2>
+  <div class="summary-grid">
+    <div class="summary-card"><div class="label">Acai (FG-128)</div><div class="value">6,799,684</div><div class="sub">across all warehouses</div></div>
+    <div class="summary-card urgent"><div class="label">Lemon Orange (FG-138)</div><div class="value">1,437,746</div><div class="sub">global bottleneck</div></div>
+    <div class="summary-card"><div class="label">Mango (FG-139)</div><div class="value">2,689,187</div><div class="sub">across all warehouses</div></div>
+    <div class="summary-card urgent"><div class="label">Earliest variety cutover</div><div class="value">2026-06-05</div><div class="sub">US — Reno</div></div>
+  </div>
+
+  <div class="callout danger">
+    <h3>⚠ Critical risks</h3>
+    <ul>
+      <li><b>FG-245 (Lemon Orange v2.1) = 0 globally</b>. Confirm PO + ETA per warehouse.</li>
+      <li><b>Stord US — Reno</b> cuts over first on <b>2026-06-05</b> (LEMON depletes).</li>
+      <li><b>XLWMS MENA — GPS-US (JFK)</b> has the longest single-flavor runway — stranded v2.0 stock risk.</li>
+    </ul>
+  </div>
+
+  <h2 class="section-title">Cutover Timeline</h2>
+  <div class="timeline"><div class="timeline-row"><div class="timeline-label">🇺🇸 US — Reno</div><div class="timeline-track"><div class="timeline-marker urgency-critical" style="left:0%"><span class="timeline-date">2026-06-05</span></div></div></div><div class="timeline-row"><div class="timeline-label">🇪🇺 EU — Amsterdam</div><div class="timeline-track"><div class="timeline-marker urgency-critical" style="left:1.8867924528301887%"><span class="timeline-date">2026-06-06</span></div></div></div><div class="timeline-row"><div class="timeline-label">🇬🇧 UK — REX (LHR)</div><div class="timeline-track"><div class="timeline-marker urgency-urgent" style="left:16.9811320754717%"><span class="timeline-date">2026-06-14</span></div></div></div><div class="timeline-row"><div class="timeline-label">🇺🇸 US — Atlanta</div><div class="timeline-track"><div class="timeline-marker urgency-urgent" style="left:22.641509433962266%"><span class="timeline-date">2026-06-17</span></div></div></div><div class="timeline-row"><div class="timeline-label">🇭🇰 Hong Kong</div><div class="timeline-track"><div class="timeline-marker urgency-urgent" style="left:24.528301886792452%"><span class="timeline-date">2026-06-18</span></div></div></div><div class="timeline-row"><div class="timeline-label">🌍 MENA — GPS-US (JFK)</div><div class="timeline-track"><div class="timeline-marker urgency-plan" style="left:100%"><span class="timeline-date">2026-07-28</span></div></div></div></div>
+
+  <h2 class="section-title">Warehouse Summary (sorted by earliest cutover)</h2>
+  <div class="wh-cards">
+    <article class="wh-card urgency-critical">
+      <header class="wh-header"><div class="wh-title"><span class="wh-flag">🇺🇸</span><h2>Stord US — Reno</h2></div><span class="wh-region">US/CA</span></header>
+      <div class="wh-grid">
+        <div class="wh-block primary"><div class="wh-label">Variety cutover to v2.1</div><div class="wh-date">2026-06-05</div><div class="wh-meta">in 13 days</div></div>
+        <div class="wh-block"><div class="wh-label">Bottleneck</div><div class="wh-bottleneck lemon">LEMON</div><div class="wh-meta">depletes first</div></div>
+        <div class="wh-block"><div class="wh-label">Status</div><div class="wh-status">CRITICAL — act this week</div></div>
+      </div>
+      <div class="wh-phase2"><div class="wh-phase2-title">After cutover, keep using Acai &amp; Mango sticks:</div><ul class="wh-phase2-list"><li><span class="dot acai"></span><b>2,419,818 Acai sticks</b> → Acai refills until <b>2027-06-23</b></li><li><span class="dot mango"></span><b>60,470 Mango sticks</b> → Mango refills until <b>2026-07-17</b></li></ul></div>
+      <div class="wh-stock"><span><span class="dot acai"></span>Acai: <b>2,640,028</b></span><span><span class="dot lemon"></span>Lemon: <b>136,198</b></span><span><span class="dot mango"></span>Mango: <b>206,074</b></span></div>
+    </article>
+
+    <article class="wh-card urgency-critical">
+      <header class="wh-header"><div class="wh-title"><span class="wh-flag">🇪🇺</span><h2>Stord EU — Amsterdam</h2></div><span class="wh-region">EU/ROW</span></header>
+      <div class="wh-grid">
+        <div class="wh-block primary"><div class="wh-label">Variety cutover to v2.1</div><div class="wh-date">2026-06-06</div><div class="wh-meta">in 14 days</div></div>
+        <div class="wh-block"><div class="wh-label">Bottleneck</div><div class="wh-bottleneck mango">MANGO</div><div class="wh-meta">depletes first</div></div>
+        <div class="wh-block"><div class="wh-label">Status</div><div class="wh-status">CRITICAL — act this week</div></div>
+      </div>
+      <div class="wh-phase2"><div class="wh-phase2-title">After cutover, keep using Acai &amp; Lemon sticks:</div><ul class="wh-phase2-list"><li><span class="dot acai"></span><b>526,812 Acai sticks</b> → Acai refills until <b>2026-09-10</b></li><li><span class="dot lemon"></span><b>113,519 Lemon sticks</b> → Lemon refills until <b>2026-09-17</b></li></ul></div>
+      <div class="wh-stock"><span><span class="dot acai"></span>Acai: <b>709,978</b></span><span><span class="dot lemon"></span>Lemon: <b>221,038</b></span><span><span class="dot mango"></span>Mango: <b>101,786</b></span></div>
+    </article>
+
+    <article class="wh-card urgency-urgent">
+      <header class="wh-header"><div class="wh-title"><span class="wh-flag">🇬🇧</span><h2>XLWMS UK — REX (LHR)</h2></div><span class="wh-region">UK</span></header>
+      <div class="wh-grid">
+        <div class="wh-block primary"><div class="wh-label">Variety cutover to v2.1</div><div class="wh-date">2026-06-14</div><div class="wh-meta">in 22 days</div></div>
+        <div class="wh-block"><div class="wh-label">Bottleneck</div><div class="wh-bottleneck mango">MANGO</div><div class="wh-meta">depletes first</div></div>
+        <div class="wh-block"><div class="wh-label">Status</div><div class="wh-status">URGENT — plan within 30 days</div></div>
+      </div>
+      <div class="wh-phase2"><div class="wh-phase2-title">After cutover, keep using Acai &amp; Lemon sticks:</div><ul class="wh-phase2-list"><li><span class="dot acai"></span><b>33,452 Acai sticks</b> → Acai refills until <b>2026-06-23</b></li><li><span class="dot lemon"></span><b>14,957 Lemon sticks</b> → Lemon refills until <b>2026-07-22</b></li></ul></div>
+      <div class="wh-stock"><span><span class="dot acai"></span>Acai: <b>177,037</b></span><span><span class="dot lemon"></span>Lemon: <b>75,518</b></span><span><span class="dot mango"></span>Mango: <b>63,700</b></span></div>
+    </article>
+
+    <article class="wh-card urgency-urgent">
+      <header class="wh-header"><div class="wh-title"><span class="wh-flag">🇺🇸</span><h2>Stord US — Atlanta</h2></div><span class="wh-region">US/CA</span></header>
+      <div class="wh-grid">
+        <div class="wh-block primary"><div class="wh-label">Variety cutover to v2.1</div><div class="wh-date">2026-06-17</div><div class="wh-meta">in 25 days</div></div>
+        <div class="wh-block"><div class="wh-label">Bottleneck</div><div class="wh-bottleneck lemon">LEMON</div><div class="wh-meta">depletes first</div></div>
+        <div class="wh-block"><div class="wh-label">Status</div><div class="wh-status">URGENT — plan within 30 days</div></div>
+      </div>
+      <div class="wh-phase2"><div class="wh-phase2-title">After cutover, keep using Acai &amp; Mango sticks:</div><ul class="wh-phase2-list"><li><span class="dot acai"></span><b>255,589 Acai sticks</b> → Acai refills until <b>2026-07-05</b></li><li><span class="dot mango"></span><b>1,554,667 Mango sticks</b> → Mango refills until <b>2027-12-21</b></li></ul></div>
+      <div class="wh-stock"><span><span class="dot acai"></span>Acai: <b>1,183,900</b></span><span><span class="dot lemon"></span>Lemon: <b>558,634</b></span><span><span class="dot mango"></span>Mango: <b>2,110,995</b></span></div>
+    </article>
+
+    <article class="wh-card urgency-urgent">
+      <header class="wh-header"><div class="wh-title"><span class="wh-flag">🇭🇰</span><h2>D365 — Hong Kong</h2></div><span class="wh-region">APAC</span></header>
+      <div class="wh-grid">
+        <div class="wh-block primary"><div class="wh-label">Variety cutover to v2.1</div><div class="wh-date">2026-06-18</div><div class="wh-meta">in 26 days</div></div>
+        <div class="wh-block"><div class="wh-label">Bottleneck</div><div class="wh-bottleneck mango">MANGO</div><div class="wh-meta">depletes first</div></div>
+        <div class="wh-block"><div class="wh-label">Status</div><div class="wh-status">URGENT — plan within 30 days</div></div>
+      </div>
+      <div class="wh-phase2"><div class="wh-phase2-title">After cutover, keep using Acai &amp; Lemon sticks:</div><ul class="wh-phase2-list"><li><span class="dot acai"></span><b>718,506 Acai sticks</b> → Acai refills until <b>2026-11-25</b></li><li><span class="dot lemon"></span><b>11,354 Lemon sticks</b> → Lemon refills until <b>2026-07-01</b></li></ul></div>
+      <div class="wh-stock"><span><span class="dot acai"></span>Acai: <b>1,010,184</b></span><span><span class="dot lemon"></span>Lemon: <b>186,408</b></span><span><span class="dot mango"></span>Mango: <b>180,034</b></span></div>
+    </article>
+
+    <article class="wh-card urgency-plan">
+      <header class="wh-header"><div class="wh-title"><span class="wh-flag">🌍</span><h2>XLWMS MENA — GPS-US (JFK)</h2></div><span class="wh-region">MENA</span></header>
+      <div class="wh-grid">
+        <div class="wh-block primary"><div class="wh-label">Variety cutover to v2.1</div><div class="wh-date">2026-07-28</div><div class="wh-meta">in 66 days</div></div>
+        <div class="wh-block"><div class="wh-label">Bottleneck</div><div class="wh-bottleneck mango">MANGO</div><div class="wh-meta">depletes first</div></div>
+        <div class="wh-block"><div class="wh-label">Status</div><div class="wh-status">PLAN — within quarter</div></div>
+      </div>
+      <div class="wh-phase2"><div class="wh-phase2-title">After cutover, keep using Acai &amp; Lemon sticks:</div><ul class="wh-phase2-list"><li><span class="dot acai"></span><b>999,044 Acai sticks</b> → Acai refills until <b>2029-10-14</b></li><li><span class="dot lemon"></span><b>235,208 Lemon sticks</b> → Lemon refills until <b>2038-07-06</b></li></ul></div>
+      <div class="wh-stock"><span><span class="dot acai"></span>Acai: <b>1,078,557</b></span><span><span class="dot lemon"></span>Lemon: <b>259,950</b></span><span><span class="dot mango"></span>Mango: <b>26,598</b></span></div>
+    </article></div>
+
+  <h2 class="section-title">How to read this</h2>
+  <div class="panel">
+    <p><b>Variety cutover</b> — date this warehouse must switch all variety FGs from v2.0 to v2.1.</p>
+    <p><b>Bottleneck flavor</b> — stick flavor that runs out first at that warehouse.</p>
+    <p><b>After cutover</b> — single-flavor refills continue using remaining v2.0 sticks of other flavors, so we use up every stick.</p>
+    <p style="margin-top:10px; color:var(--muted); font-size:12px;">Demand from <b>ops.demand_daily</b> (same source as the Procurement Runway and Action Planner modules) using FORWARD_ALL sources: Skio multi-cycle subscriptions + OTP forecast + new-sub forecast + gift journey. Horizon: forward 84 days. US split ATL/RENO via stord.fulfillment_ratios.</p>
+    <p style="margin-top:10px; color:var(--muted); font-size:12px;">Full operational detail (BOM stick counts, top consuming FGs per warehouse) is in the PDF passed to OPS.</p>
+  </div>
+
+  <footer>IM8 Hub Ops · Generated 2026-05-23 · 19 active FGs · 6 warehouses · Confidential</footer>
+</div></body></html>
